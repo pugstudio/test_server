@@ -1,15 +1,16 @@
 package com.example.test_server.web_socket;
 
+import com.example.test_server.model.ObjectMethodPair;
+import com.example.test_server.model.ResponseBodyModel;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import javafx.util.Pair;
+import jakarta.ws.rs.core.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-import java.lang.reflect.Method;
 
 @Slf4j
 public class MyWebSocketHandler extends TextWebSocketHandler {
@@ -35,15 +36,20 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 //        String methodPath = uriParts[1];
 
 
-        Pair<Object, Method> method = webSocketService.getMethodForPath("/v1/user/all");
+        ObjectMethodPair method = webSocketService.getMethodForPath("/v1/user/all");
+        ResponseBodyModel result = null;
         if (method != null) {
-            method.getValue().invoke(method.getKey());
+            result = (ResponseBodyModel) method.getSecond().invoke(method.getFirst());
+        } else {
+            result = ResponseBodyModel.status(Response.Status.CONFLICT);
         }
 
         JsonNode header = messageJson.get(1);
         JsonNode body = messageJson.get(2);
         ((ObjectNode) body).removeAll();
-        ((ObjectNode) body).put("content", "hello");
+        ((ObjectNode) body).put("desc", result.getDesc());
+        ((ObjectNode) body).put("status", result.getStatus());
+        ((ObjectNode) body).put("content", objectMapper.convertValue(result.getContent(), JsonNode.class));
 
         session.sendMessage(new TextMessage(messageJson.toString()));
     }

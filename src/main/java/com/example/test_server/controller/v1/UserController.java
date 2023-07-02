@@ -1,5 +1,6 @@
 package com.example.test_server.controller.v1;
 
+import com.example.test_server.model.ResponseBodyModel;
 import com.example.test_server.web_socket.WebSocketMapping;
 import com.example.test_server.model.dto.UserDto;
 import com.example.test_server.service.v1.UserService;
@@ -23,12 +24,11 @@ public class UserController {
 
     @WebSocketMapping("/all")
     @ResponseBody
-    public List<UserDto> getAllUsers() {
+    public ResponseBodyModel getAllUsers() {
+        ResponseBodyModel responseBody = ResponseBodyModel.ok();
         List<UserDto> result = userService.findAll();
-        log.info("MATTTTT {}", result.get(0).getId());
-        return result;
+        return responseBody.addContent("userList", result);
     }
 
-    // 이하 findById, insert, update, delete 메소드를 작성하시면 됩니다.
 }
 

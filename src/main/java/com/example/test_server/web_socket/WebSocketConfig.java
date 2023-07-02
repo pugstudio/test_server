@@ -16,6 +16,6 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(new MyWebSocketHandler(webSocketService), "/ws");
+        registry.addHandler(new MyWebSocketHandler(webSocketService), "/pepper_core");
     }
 }

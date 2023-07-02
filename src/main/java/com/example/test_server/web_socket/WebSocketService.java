@@ -1,7 +1,6 @@
 package com.example.test_server.web_socket;
 
-import javafx.util.Pair;
-import lombok.extern.slf4j.Slf4j;
+import com.example.test_server.model.ObjectMethodPair;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
@@ -13,10 +12,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-@Slf4j
+
 @Service
 public class WebSocketService {
-    Map<String, Pair<Object, Method>> pathToInstanceAndMethodMap = new HashMap<>();
+    Map<String, ObjectMethodPair> pathToInstanceAndMethodMap = new HashMap<>();
 
     ApplicationContext applicationContext;
     public WebSocketService(ApplicationContext applicationContext) {
@@ -36,14 +35,14 @@ public class WebSocketService {
                 if (method.isAnnotationPresent(WebSocketMapping.class)) {
                     String methodLevelPath = method.getAnnotation(WebSocketMapping.class).value();
                     String fullPath = classLevelPath + methodLevelPath; // 클래스 레벨과 메서드 레벨 경로를 합침
-                    pathToInstanceAndMethodMap.put(fullPath, new Pair<>(instance, method));
+                    pathToInstanceAndMethodMap.put(fullPath, new ObjectMethodPair(instance, method));
 
                 }
             }
         }
     }
 
-    public Pair<Object, Method> getMethodForPath(String path) {
+    public ObjectMethodPair getMethodForPath(String path) {
         return pathToInstanceAndMethodMap.get(path);
     }
 }
