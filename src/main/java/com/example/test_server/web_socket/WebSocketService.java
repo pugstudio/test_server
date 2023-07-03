@@ -4,9 +4,9 @@ import com.example.test_server.model.ObjectMethodPair;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
-import jakarta.annotation.PostConstruct;
 import org.reflections.Reflections;
 
+import javax.annotation.PostConstruct;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
