@@ -15,6 +15,7 @@
     <description>test_server</description>
     <properties>
         <java.version>11</java.version>
+        <mainClass>${main_class}</mainClass>
     </properties>
     <dependencies>
         <dependency>
